@@ -1,0 +1,6 @@
+.Rproj.user
+*_cache
+*_files
+_book
+_main.*
+*.rds
