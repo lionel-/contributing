@@ -106,7 +106,7 @@ tools/rsync-recommended
 
 ## The build directory {#sec:build}
 
-Running `configure` and `make` inside the root directory of the R sources is unpractical. These scripts will litter your repository by creating files all over the place. These files can't be gitignored effectively and will get in the way of your workflow. For this reason, we are going to build R from a separate directory.
+Running `configure` and `make` inside the root directory of the R sources is not very practical because they create files all over the place. These files can't be gitignored effectively and will get in the way of your workflow. To avoid littering the repository with generated files, we are going to build R from a separate directory.
 
 The build directory can be created anywhere you like. Here we'll create it inside the repository and gitignore it:
 
