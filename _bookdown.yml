@@ -3,6 +3,8 @@ new_session: yes
 
 rmd_files:
   [
-    "index.md",
-    "building.md",
+    "index.Rmd",
+    "building.Rmd",
+    "hierarchy.Rmd",
+    "patching.Rmd",
   ]

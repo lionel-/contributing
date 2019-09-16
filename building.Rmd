@@ -82,7 +82,7 @@ ls
 #> Makeconf.in     VERSION         configure.ac    po/             tools/
 ```
 
-R is configured for your system and built into binaries using the [Autotools](https://en.wikipedia.org/wiki/GNU_Build_System) build system. Thwo important Autotools files are:
+R is configured for your system and built into binaries using the [Autotools](https://en.wikipedia.org/wiki/GNU_Build_System) build system. Two important Autotools files are:
 
 * `configure`: This is an executable script that configures the build system for your particular machine.
 
@@ -104,7 +104,7 @@ tools/rsync-recommended
 ```
 
 
-## The build directory
+## The build directory {#sec:build}
 
 Running `configure` and `make` inside the root directory of the R sources is unpractical. These scripts will litter your repository by creating files all over the place. These files can't be gitignored effectively and will get in the way of your workflow. For this reason, we are going to build R from a separate directory.
 
@@ -262,19 +262,3 @@ R
     ```sh
     xcode-select --install
     ```
-
-## Rebuilding R
-
-Compiling R takes some time. Building it from scratch every time you'd like to test a change would slow down your workflow considerably. Fortunately, it is easy to rebuild only parts of it.
-
-If you have changed a source file inside `src/main` run this from the build directory:
-
-```sh
-(cd src/main/ && make) && make install
-```
-
-If you have changed a package (say `base`), use:
-
-```sh
-(cd src/library/base/ && make && cd .. && make install)
-```

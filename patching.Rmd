@@ -1,0 +1,98 @@
+
+# Basic workflow
+
+Update the `trunk` branch to the latest sources with `git svn rebase`. Create a new branch for your changes and develop as you would normally with git commits.
+
+
+## Rebuilding R
+
+Compiling R takes some time. Building it from scratch every time you'd like to test a change would slow down your workflow considerably. Fortunately, it is easy to rebuild only parts of it.
+
+If you have changed a source file inside `src/main` run this from the [build](#sec:build) directory:
+
+```sh
+(cd src/main/ && make) && make install
+```
+
+If you have changed a package (say `base`), use:
+
+```sh
+(cd src/library/base/ && make && cd .. && make install)
+```
+
+
+## Testing your changes
+
+### Running tests
+
+Go to the `tests` folder inside your [build](#sec:build) directory. There are many `make` targets for running tests. See the [README file](https://github.com/wch/r-source/tree/trunk/tests) in the tests folder. The three main targets to know about are:
+
+- `make test-Specific`: Runs the main regression test files.
+
+- `make check-devel`: Runs all tests minus those of the recommended package. This includes running examples of the base packages and checking the outputs conform and no unexpected errors arise.
+
+- `make check-all`: Runs all tests including those of the recommended packages. You normally don't need to run this until you're ready to finalise a patch.
+
+Running the `check-devel` and `check-all` suites can take quite some time. Set this environment variable (maybe in your shell profile) to run the tests in parallel (in this case on 4 cores):
+
+```sh
+TEST_MC_CORES=4
+```
+
+
+### Output comparison
+
+Many test files have a `.Rout.save` file checked in the repository. These files are meant to monitor changes to the output of tested functions. There are two kinds of comparisons:
+
+- Strict, like `method-dispatch.Rout.save`. The saved and actual outputs must match exactly or the tests fail.
+
+- Sloppy, like `print-tests.Rout.save`. The diff of the changes are printed at the console, but they don't make the tests fail.
+
+In doubt, check [`tests/Makefile.common`](https://github.com/wch/r-source/blob/trunk/tests/Makefile.common) and search for `RVAL_IF_DIFF`. If set to 1, the comparison is strict, otherwise it is sloppy.
+
+Some tests are compared sloppily because they are sensitive to benign changes, for instance:
+
+- The presence of `srcref` attributes might change how functions are printed. This could happen if you have set `R_KEEP_PKG_SOURCE`.
+
+- The memory addresses of environments or bytecode will change each time the file is run.
+
+It is your responsibility to inspect all output changes in the test results and determine whether they actually are failures.
+
+
+## Making a patch
+
+In a git-based workflow, you submit contributions via pull requests. Since R core doesn't use git, we're going to submit our changes the old fashioned way, by creating a [patch file](https://en.wikipedia.org/wiki/Patch_%28Unix%29).
+
+
+### With github
+
+Fortunately it is very easy to create patches from git branches and git commits. The simplest way is to send a pull request or branch to your github's mirror repo and append `.patch` to a PR or commit URL. If you do that on a PR, all the commits are folded in a single patch. For instance, given this dummy PR that I made to my own clone of the R sources on github:
+
+> https://github.com/lionel-/r-source/pull/5
+
+Get the corresponding patch via this URL:
+
+> https://github.com/lionel-/r-source/pull/5.patch
+
+It also works with individual commits:
+
+> https://github.com/lionel-/r-source/commit/7b7ce5be72cab4c6ad41f0d8eb01591a4c01a882.patch
+
+
+### At the command line
+
+To manually create a patch, use `git format-patch`. When given one argument (a revision), it creates patches for each commit from that revision to the current head:
+
+```sh
+git checkout mypatch
+git format-patch trunk
+```
+
+Squash the commits together beforehand if you'd like to create a single patch.
+
+
+## Submitting
+
+If the patch is trivial (e.g. it fixes a bug, implements a small feature that was already discussed), create a [bugzilla report](https://bugs.r-project.org) with a reprex if there isn't one already. Attach the patch, click on "Show Advanced Fields" to reveal the "Content Type" checkbox and declare the attachment is a patch. This way the patch is properly formatted in the bug report.
+
+If the patch introduces a new feature or change the API, it's probably better to discuss it first on r-devel or with the relevant R core maintainer.

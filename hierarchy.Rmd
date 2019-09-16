@@ -1,0 +1,76 @@
+
+# (PART) Patching R {-}
+
+# Organisation of the source code
+
+## The `src` directory
+
+This is where the sources of R live. The main folders to know about in `src` are `scripts`, `library`, `include`, and `main`.
+
+
+### [`src/include`](https://github.com/wch/r-source/tree/trunk/src/include)
+
+This is the location for the header files containing the declarations and definitions of the R API. Some of these are publicly available in packages:
+
+- [`src/include/Rinternals.h`](https://github.com/wch/r-source/blob/trunk/src/include/Rinternals.h). Main declarations of the R API.
+
+  Examples: The `SEXPTYPE` enum; array accessors like `REAL()`, various object accessors like `CAR()`, `BODY()` or `ENCLOS()`; functions like `Rf_coerceVector()`; shortcuts to global objects like `R_NamesSymbol`; etc.
+
+- [`src/include/Rinlinedfuns.h`](https://github.com/wch/r-source/blob/trunk/src/include/Rinlinedfuns.h). Part of the R API that is exported with definitions, so they can be inlined in client code.
+
+  Examples: `Rf_protect()` (which the `PROTECT()` macro expands to), `Rf_isFunction()`, `Rf_inherits()`, `Rf_lang1()`, etc.
+
+Some files are only available if you're developing R:
+
+- [`src/include/Defn.h`](https://github.com/wch/r-source/blob/trunk/src/include/Defn.h). Declarations for the private accessors, data structures, and functions.
+
+  Examples: The `FUNTAB` data structure for the array of primitive functions `R_FunTab`; `RCNTXT` the data structure for the context frames of the call stack; etc.
+
+
+### [`src/main`](https://github.com/wch/r-source/tree/trunk/src/main)
+
+This folder contains the sources of R. As an interpreted language, R follows the [read-eval-print-loop](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) pattern. We briefely present the files implementing each of these four components.
+
+- [`src/main/gram.y`](https://github.com/wch/r-source/blob/trunk/src/main/gram.y) is the input file for the [bison](https://www.gnu.org/software/bison/) parser generator. It implements the R parser, i.e. the __"read"__ part of the REPL. You'll find the operator precedence table, the grammar of the R language, and the low level constructors for the objects of the parse tree (function calls mostly).
+
+  The parser can read entire files (most commonly from `source()`), or it can read a single string, e.g. the user input at the console. It returns an `EXPRSXP` vector containing each top-level expression.
+
+- [`src/main/eval.c`](https://github.com/wch/r-source/tree/trunk/src/main/eval.c) implements the interpreter of R code the __"eval"__ part of the REPL. The main function `eval()` evaluates the components of an expression, until it can return a value. This is a recursive process, for instance calling a function causes the arguments to be stored in promises and then `eval()` is called again with the body of the function.
+
+  The logic for function calls (promising arguments, creating a new context on the call stack, evaluating the body) is implemented in this file.
+
+- [`src/main/print.c`](https://github.com/wch/r-source/tree/trunk/src/main/print.c) contains the __"print"__ code that is invoked on implicit printing of top-level expression results, as well as explicit printing via the R `print()` function. The printing routine is recursive because data structures are recursive: if you print a list, each element is printed in turn via a recursive call. Printing S3 and S4 objects causes a callback to R so that `print()` or `show()` methods can be invoked.
+
+- [`src/main/main.c`](https://github.com/wch/r-source/tree/trunk/src/main/main.c). This is where the main __"loop"__ of the REPL is implemented. This involves the code for initialising R, waiting for user inputs, and dealing with parse errors or expression results (catching top-level jumps, saving `.Last.value`, etc).
+
+Other important files are:
+
+- [`src/main/names.c`](https://github.com/wch/r-source/tree/trunk/src/main/names.c) defines the primitive function table (such as `list()`, `(`, or `eval()`). This table contains information about the primitive functions: a function pointer for the native routine, whether the primitive function is internal or exposed to the user, whether it evaluates its arguments and returns its value invisibly. For primitives implementing binary operators like `+`, the table also contains precedence information used for deparsing.
+
+- [`src/main/context.c`](https://github.com/wch/r-source/tree/trunk/src/main/context.c) implements the R call stack.
+
+- [`src/main/errors.c`](https://github.com/wch/r-source/tree/trunk/src/main/errors.c) implements condition handling and error jumps.
+
+- [`src/main/objects.c`](https://github.com/wch/r-source/tree/trunk/src/main/objects.c) implements method dispatch for S3 and S4 objects.
+
+
+### Other folders of interest
+
+- The [`src/scripts`](https://github.com/wch/r-source/tree/trunk/src/scripts) folder contains shell scripts for `R CMD` commands. For instance, `R CMD check` is implemented in [`src/scripts`](https://github.com/wch/r-source/blob/trunk/src/scripts/check). The scripts are often very simple and invoke R code implemented in the tools package.
+
+- The [`src/library`](https://github.com/wch/r-source/tree/trunk/src/library) folder contains the sources of the base packages, like `base`, `stats`, or `utils`.
+
+
+## The `tests` directory
+
+The unit tests for R are stored in the [`tests`](https://github.com/wch/r-source/tree/trunk/tests) folder. This folder contains:
+
+- A `README` file describing all the `make` shortcuts for running various subsets of the tests.
+
+- Specific regression test files like [`tests/method-dispatch.R`](https://github.com/wch/r-source/blob/trunk/tests/method-dispatch.R) or [`tests/print-tests.R`](https://github.com/wch/r-source/blob/trunk/tests/print-tests.R).
+
+- General purpose regression test files like [`tests/reg-tests-1d.R`](https://github.com/wch/r-source/blob/trunk/tests/reg-tests-1d.R). Add new tests to the file with the highest letter (1d at the time of writing). The files suffixed with lower letters are for older versions of R.
+
+- `.Rout.save` files containing the console output after running the test files.
+
+- The [`tests/Examples`](https://github.com/wch/r-source/tree/trunk/tests/Examples) folder containing `.Rout.save` files for the examples of base packages.
