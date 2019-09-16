@@ -22,7 +22,7 @@ This is the location for the header files containing the declarations and defini
 
 Some files are only available if you're developing R:
 
-- [`src/include/Defn.h`](https://github.com/wch/r-source/blob/trunk/src/include/Defn.h). Declarations for the private accessors, data structures, and functions.
+- [`src/include/Defn.h`](https://github.com/wch/r-source/blob/trunk/src/include/Defn.h). Declarations for the private accessors, data structures, and functions. This includes declarations for the functions prefixed in `do_`, which contain the native code of primitive R functions.
 
   Examples: The `FUNTAB` data structure for the array of primitive functions `R_FunTab`; `RCNTXT` the data structure for the context frames of the call stack; etc.
 
@@ -45,7 +45,7 @@ This folder contains the sources of R. As an interpreted language, R follows the
 
 Other important files are:
 
-- [`src/main/names.c`](https://github.com/wch/r-source/tree/trunk/src/main/names.c) defines the primitive function table (such as `list()`, `(`, or `eval()`). This table contains information about the primitive functions: a function pointer for the native routine, whether the primitive function is internal or exposed to the user, whether it evaluates its arguments and returns its value invisibly. For primitives implementing binary operators like `+`, the table also contains precedence information used for deparsing.
+- [`src/main/names.c`](https://github.com/wch/r-source/tree/trunk/src/main/names.c) defines the primitive function table (such as `list()`, `(`, or `eval()`). This table contains information about the primitive functions: a function pointer for the native routine (prefixed with `do_` and declared in [Defn.h](https://github.com/wch/r-source/blob/trunk/src/include/Defn.h)), whether the primitive function is internal or exposed to the user, whether it evaluates its arguments and returns its value invisibly. For primitives implementing binary operators like `+`, the table also contains precedence information used for deparsing.
 
 - [`src/main/context.c`](https://github.com/wch/r-source/tree/trunk/src/main/context.c) implements the R call stack.
 
