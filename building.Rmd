@@ -88,7 +88,7 @@ R is configured for your system and built into binaries using the [Autotools](ht
 
 * `Makefile.in`: From this template, the configure script creates a `Makefile`. This file contains instructions for the command `make`, which is the workhorse of a build system.
 
-Normally you build open source softwares with the following incantation (do not run this just yet, wait after reading the next section):
+Normally you build open source softwares with the following incantation (do not run this just yet, wait after reading about the build directory in the next sections):
 
 ```sh
 ./configure && make && make install
@@ -104,15 +104,29 @@ tools/rsync-recommended
 ```
 
 
+## Git-ignoring extraneous files
+
+In the next section you'll learn how to limit the generation of extraneous files in the git repository. But we still need to git-ignore a few files, starting with the recommended packages that we have downloaded with `tools/rsync-recommended`.
+
+The following `.gitignore` file should get you covered if you follow the recommendations in the next section:
+
+```
+.gitignore
+build/
+src/library/Recommended/*gz
+```
+
+This file ignores itself, anything that is in the `build` directory, and the tarballs of the recommended packages.
+
+
 ## The build directory {#sec:build}
 
 Running `configure` and `make` inside the root directory of the R sources is not very practical because they create files all over the place. These files can't be gitignored effectively and will get in the way of your workflow. To avoid littering the repository with generated files, we are going to build R from a separate directory.
 
-The build directory can be created anywhere you like. Here we'll create it inside the repository and gitignore it:
+The build directory can be created anywhere you like. Here we'll create it inside the repository and call it `build`. If you have copied-pasted the `.gitignore` file in the last section, this directory should already be ignored.
 
 ```sh
 mkdir build
-echo "build/" >> .git/info/exclude
 ```
 
 Now we configure the build by calling the configure script from inside the build directory:
