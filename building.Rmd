@@ -145,7 +145,7 @@ One important parameter is the location where you'd like to install R. It is nor
 ../configure --prefix=/usr/local
 ```
 
-On macOS systems it is often more practical to install R as an application framework. In that case, you don't supply `--prefix` but `--enable-R-framework`. The advantage of installing as a framework is that you can use the convenient [RSwitch](https://rud.is/rswitch/) dropdown menu to switch to the development version.
+On macOS systems it is often more practical to install R as an application framework. In that case, supply `--prefix` instead of `--enable-R-framework`. The advantage of installing as a framework is that you can use the convenient [RSwitch](https://rud.is/rswitch/) dropdown menu to switch to the development version.
 
 ```sh
 ../configure --enable-R-framework
