@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# 2019-09-17 Tue 14:34
+#
+# Generate SVN-REVISION file from the last git-svn commit in trunk.
+
+
+echo -n 'Revision: ' \
+    > SVN-REVISION
+
+git log trunk --grep='git-svn-id' -n 1 --format=%B \
+    | grep "^git-svn-id"    \
+    | sed -E 's/^git-svn-id: https:\/\/svn.r-project.org\/R\/[^@]*@([0-9]+).*$/\1/' \
+    >> SVN-REVISION
+
+echo -n 'Last Changed Date: ' \
+    >> SVN-REVISION
+
+git log trunk --grep='git-svn-id' -n 1 --pretty=format:"%ad" --date=iso \
+    | cut -d' ' -f1 \
+    >> SVN-REVISION
