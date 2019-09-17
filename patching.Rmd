@@ -59,6 +59,22 @@ Some tests are compared sloppily because they are sensitive to benign changes, f
 It is your responsibility to inspect all output changes in the test results and determine whether they actually are failures.
 
 
+### Debugging failures
+
+When an unexpected error occurs, you will find a `.Rout.fail` file in the `tests` directory (the one inside your _build_ directory). If the error was from a base package example, the failure file will be in `tests/Example`. From this file you should be able to find the source of the failure.
+
+
+### Adding new unit tests
+
+The go-to file for new unit tests is currently [`tests/reg-tests-1d.R`](https://github.com/wch/r-source/blob/trunk/tests/reg-tests-1d.R) (choose the `reg-tests-1` file with the highest letter suffix).
+
+- Insert your tests as a single block without whitespace. The tests should be navigable by contiguous paragraph. You can use `##` to create empty lines inside your block.
+
+- If you are fixing a bug, insert comments describing the old behaviour.
+
+- If you have added code to a file that has a `.Rout.save` output file checked in, you need to update that file as well. To do this, run the tests as usual. You will find a `.Rout` file inside `build/tests`. Go to `root/tests` and copy paste the new contents in the corresponding `.Rout.save` file.
+
+
 ## Making a patch
 
 In a git-based workflow, you submit contributions via pull requests. Since R core doesn't use git, we're going to submit our changes the old fashioned way, by creating a [patch file](https://en.wikipedia.org/wiki/Patch_%28Unix%29).
