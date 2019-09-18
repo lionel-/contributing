@@ -1,7 +1,7 @@
 
 # Basic workflow
 
-Update the `trunk` branch to the latest sources with `git svn rebase`. Create a new branch for your changes and develop as you would normally with git commits.
+Update the `trunk` branch to the latest sources with `git rebase`. Create a new branch for your changes and develop as you would normally with git commits.
 
 
 ## Rebuilding R
@@ -111,4 +111,4 @@ Squash the commits together beforehand if you'd like to create a single patch.
 
 If the patch is trivial (e.g. it fixes a bug, implements a small feature that was already discussed), create a [bugzilla report](https://bugs.r-project.org) with a reprex if there isn't one already. Attach the patch, click on "Show Advanced Fields" to reveal the "Content Type" checkbox and declare the attachment is a patch. This way the patch is properly formatted in the bug report.
 
-If the patch introduces a new feature or change the API, it's probably better to discuss it first on r-devel or with the relevant R core maintainer.
+If the patch introduces a new feature or change the API, it's probably better to discuss it first on r-devel or with the relevant R core member.
