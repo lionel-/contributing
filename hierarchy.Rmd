@@ -56,7 +56,7 @@ Other important files are:
 
 ### Other folders of interest
 
-- The [`src/scripts`](https://github.com/wch/r-source/tree/trunk/src/scripts) folder contains shell scripts for `R CMD` commands. For instance, `R CMD check` is implemented in [`src/scripts`](https://github.com/wch/r-source/blob/trunk/src/scripts/check). The scripts are often very simple and invoke R code implemented in the tools package.
+- The [`src/scripts`](https://github.com/wch/r-source/tree/trunk/src/scripts) folder contains shell scripts for `R CMD` commands. For instance, `R CMD check` is implemented in [`src/scripts/check`](https://github.com/wch/r-source/blob/trunk/src/scripts/check). The scripts are often very simple and invoke R code implemented in the tools package.
 
 - The [`src/library`](https://github.com/wch/r-source/tree/trunk/src/library) folder contains the sources of the base packages, like `base`, `stats`, or `utils`.
 
