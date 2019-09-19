@@ -169,7 +169,7 @@ Other important envvars are:
 
 ## Making R on macOS
 
-I personally use the following script to build R on macOS. It should be run from the build directory, and the build directory should be a folder inside the root directory:
+I personally use the [following script](https://raw.githubusercontent.com/lionel-/contributing/master/inst/build.sh) to build R on macOS. It should be run from the build directory, and the build directory should be a folder inside the root directory:
 
 ```sh
 #!/bin/bash
