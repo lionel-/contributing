@@ -27,7 +27,7 @@ If you have changed a package (say `base`), use:
 
 Go to the `tests` folder inside your [build](#sec:build) directory. There are many `make` targets for running tests. See the [README file](https://github.com/wch/r-source/tree/trunk/tests) in the tests folder. The three main targets to know about are:
 
-- `make test-Specific`: Runs the main regression test files.
+- `make test-Specific test-Reg`: Runs the main unit test files.
 
 - `make check-devel`: Runs all tests minus those of the recommended package. This includes running examples of the base packages and checking the outputs conform and no unexpected errors arise.
 
