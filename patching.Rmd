@@ -27,11 +27,13 @@ If you have changed a package (say `base`), use:
 
 Go to the `tests` folder inside your [build](#sec:build) directory. There are many `make` targets for running tests. See the [README file](https://github.com/wch/r-source/tree/trunk/tests) in the tests folder. The three main targets to know about are:
 
-- `make test-Specific test-Reg`: Runs the main unit test files.
+- `make check`: Runs the main unit test files. This includes running examples of the base packages and checking the outputs conform and no unexpected errors arise.
 
-- `make check-devel`: Runs all tests minus those of the recommended package. This includes running examples of the base packages and checking the outputs conform and no unexpected errors arise.
+- `make check-devel`: Runs all tests minus those of the recommended package. This includes running R CMD check on the base packages.
 
-- `make check-all`: Runs all tests including those of the recommended packages. You normally don't need to run this until you're ready to finalise a patch.
+- `make check-all`: Runs all tests including `R CMD check` on the recommended packages. You normally don't need to run this until you're ready to finalise a patch.
+
+Other useful targets are `test-Specific`, `test-Sloppy`, and `test-Reg` as their running time is much faster. If you're having trouble with a particular test domain and would like to find a smaller target to run these tests, check [Makefile.common](https://github.com/wch/r-source/blob/trunk/tests/Makefile.common) to find out which target invokes these tests.
 
 Running the `check-devel` and `check-all` suites can take quite some time. Set this environment variable (maybe in your shell profile) to run the tests in parallel (in this case on 4 cores):
 
