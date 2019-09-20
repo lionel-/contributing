@@ -1,7 +1,7 @@
 
 # Basic workflow
 
-Update the `trunk` branch to the latest sources with `git rebase`. Create a new branch for your changes and develop as you would normally with git commits.
+Update the `trunk` branch to the latest sources with `git pull --rebase`. Create a new branch for your changes off of `trunk` and develop as you would normally with git commits.
 
 
 ## Rebuilding R
