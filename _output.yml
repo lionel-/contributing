@@ -1,6 +1,4 @@
 bookdown::gitbook:
-  includes:
-    in_header: [ga_script.html]
   config:
     sharing:
       github: yes
@@ -11,4 +9,3 @@ bookdown::gitbook:
       before: |
         <li><strong><a href="./">Contributing to GNU R</a></strong></li>
     edit: https://github.com/lionel-/contributing/edit/master/%s
-  css: adv-r.css
