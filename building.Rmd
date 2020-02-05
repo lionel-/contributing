@@ -246,3 +246,7 @@ R --version
 *   libcurl >= 7.28.0 library and headers are required with support for https
 
     Take anaconda off of your PATH ([SO](https://stackoverflow.com/a/51318770)).
+
+*   X11 headers/libs are not available
+
+    Install XQuartz from <https://www.xquartz.org/>.
