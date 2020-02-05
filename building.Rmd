@@ -250,3 +250,7 @@ R --version
 *   X11 headers/libs are not available
 
     Install XQuartz from <https://www.xquartz.org/>.
+
+*   Run `make clean` in the build directory after installing a new version of macOS. If you forget you will likely see errors about specific and versioned header files and libraries.
+
+*   Your personal `Makevars` file influences the compilation of recommended packages. This might be a source of compilation issues if the environment variables set up there are not up to date (for instance `F77` and `FC` set to `gfortran-8` when the current installed version is `gfortran-9`).
