@@ -20,6 +20,19 @@ If you have changed a package (say `base`), use:
 (cd src/library/base/ && make && cd .. && make install)
 ```
 
+### Regenerating the `configure` Script
+
+If you need to make changes to the `configure.ac` Autoconf script (say, to add a new compile-time feature), you must also regenerate the corresponding `configure` script.
+
+[R uses](https://stat.ethz.ch/pipermail/r-devel/2017-August/074735.html) the equivalent of the following from the top-level directory:
+
+```sh
+aclocal -I m4 .
+autoconf
+```
+
+You can then stage the corresponding changes to `configure` into Git. Bear in mind that different versions of Autoconf might make unrelated changes which you should avoid staging: for example, R currently uses Autoconf 2.69, and Autoconf 2.70 introduces a new `--runstatedir` flag.
+
 
 ## Testing your changes
 
