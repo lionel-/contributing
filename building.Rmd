@@ -225,6 +225,24 @@ R --version
 
 ### Compilation troubleshooting
 
+*   No Fortran compiler found
+
+    Install gfortran from https://mac.r-project.org/tools/. Add `/usr/local/gfortran/bin` to your `PATH` or pass `FC=/usr/local/gfortran/bin F77=$FC` to the configure script.
+
+    Other warnings and errors about fortran may also be resolved by installing gfortran from that location.
+
+*   PCRE2 library and headers are required
+
+    ```
+    brew install pcre2
+    ```
+
+*   libcurl >= 7.28.0 library and headers are required with support for https
+
+    ```
+    brew install curl-openssl
+    ```
+
 *   liblzma library and headers are required
 
     ```sh
