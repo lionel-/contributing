@@ -1,21 +1,28 @@
 #!/bin/bash
 
-# 2019-09-17 Tue 16:26
+# 2022-06-24 Tue 15:51
 #
 # Generate SVN-REVISION file from the last git-svn commit in the current branch.
 
+BUILD_DIR=$(realpath .)
+
+# Switch to the repo so that `git` commands work. Stay in the build
+# dir by default, but this only works if `build` is a subdirectory
+# inside the repo.
+SRC_DIR=${1-$BUILD_DIR}
+cd ${SRC_DIR}
 
 echo -n 'Revision: ' \
-    > SVN-REVISION
+    > ${BUILD_DIR}/SVN-REVISION
 
 git log --grep='git-svn-id' -n 1 --format=%B \
     | grep "^git-svn-id"    \
     | sed -E 's/^git-svn-id: https:\/\/svn.r-project.org\/R\/[^@]*@([0-9]+).*$/\1/' \
-    >> SVN-REVISION
+    >> ${BUILD_DIR}/SVN-REVISION
 
 echo -n 'Last Changed Date: ' \
-    >> SVN-REVISION
+    >> ${BUILD_DIR}/SVN-REVISION
 
 git log --grep='git-svn-id' -n 1 --pretty=format:"%ad" --date=iso \
     | cut -d' ' -f1 \
-    >> SVN-REVISION
+    >> ${BUILD_DIR}/SVN-REVISION
